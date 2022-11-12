@@ -49,6 +49,7 @@ namespace ReinventTheWheelProblem2 {
                         }
                     }
 
+                    // hopefully we never hit this line
                     if (defaultCost < shipCost) {
                         Console.WriteLine("default cost is lower than ship cost");
                     }
@@ -73,7 +74,7 @@ namespace ReinventTheWheelProblem2 {
             ShipData minShip = EmptyShipData;
 
             foreach (EndPoint currentEp in paths.Keys) {
-                // skip if we've already used this path or if the end point is already full
+                // skip if the end point is already full
                 if (currentEp.Path.TotalTires == currentEp.Path.MaxTires) {
                     continue;
                 }
