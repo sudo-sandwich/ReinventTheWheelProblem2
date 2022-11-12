@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ReinventTheWheelProblem2 {
-    class ModelCreator {
+    class ModelCsv {
         private record Capacity(string location, int max_tire_capacity);
         private record Distances(string dc_name, string destination, int distance);
         private record SecondLeg(string location, double base_ghg, double additional_ghg_per_tire);
@@ -38,7 +38,7 @@ namespace ReinventTheWheelProblem2 {
             foreach (TotalTires tt in totalTires) {
                 startPoints.Add(tt.dc_name, new StartPoint() {
                     Name = tt.dc_name,
-                    Tires = tt.tires
+                    InitialTires = tt.tires
                 });
             }
 
@@ -91,12 +91,12 @@ namespace ReinventTheWheelProblem2 {
             }
 
             foreach (Distances d in distances) {
-                startPoints[d.dc_name].ElectricVehicle.Add(endPoints[d.destination], new Path() {
+                startPoints[d.dc_name].EvPaths.Add(endPoints[d.destination], new Path() {
                     BaseGhg = EvBaseGhg * d.distance,
                     TireGhg = EvTireGhg * d.distance,
                     MaxTires = EvMaxTires
                 });
-                startPoints[d.dc_name].DieselVehicle.Add(endPoints[d.destination], new Path() {
+                startPoints[d.dc_name].DvPaths.Add(endPoints[d.destination], new Path() {
                     BaseGhg = DvBaseGhg * d.distance,
                     TireGhg = DvTireGhg * d.distance,
                     MaxTires = DvMaxTires
@@ -108,7 +108,55 @@ namespace ReinventTheWheelProblem2 {
                 EndPoints = endPoints.Values
             };
 
+            model.Reset();
+
             return model;
+        }
+
+        public record Output(string dc_name, string vehicle_name, string destination, int number_of_tires_shipped);
+
+        public static ICollection<Output> GetResult(Model model) {
+            List<Output> output = new();
+
+            foreach (StartPoint sp in model.StartPoints) {
+                IEnumerator<string> evNames = sp.EvNames.GetEnumerator();
+                IEnumerator<string> dvNames = sp.DvNames.GetEnumerator();
+                evNames.MoveNext();
+                dvNames.MoveNext();
+
+                foreach (EndPoint ep in sp.EvPaths.Keys) {
+                    if (sp.EvPaths[ep].Tires > 0) {
+                        output.Add(new(sp.Name, evNames.Current, ep.Name, sp.EvPaths[ep].Tires));
+                        evNames.MoveNext();
+                    }
+                }
+
+                foreach (EndPoint ep in sp.DvPaths.Keys) {
+                    if (sp.DvPaths[ep].Tires > 0) {
+                        output.Add(new(sp.Name, dvNames.Current, ep.Name, sp.DvPaths[ep].Tires));
+                        dvNames.MoveNext();
+                    }
+                }
+            }
+
+            Console.WriteLine("---------");
+            foreach (Output o in output) {
+                Console.WriteLine(o.ToString());
+            }
+
+            return output;
+        }
+
+        public static void Export(ICollection<Output> result, string outputPath) {
+            Console.WriteLine(result.Count);
+
+            using FileStream fileStream = new FileStream(outputPath, FileMode.Truncate);
+            using StreamWriter writer = new StreamWriter(fileStream);
+            using CsvWriter csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
+
+            csvWriter.WriteHeader<Output>();
+            csvWriter.NextRecord();
+            csvWriter.WriteRecords(result);
         }
     }
 }

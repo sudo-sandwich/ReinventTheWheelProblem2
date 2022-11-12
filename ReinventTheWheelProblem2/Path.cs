@@ -21,7 +21,7 @@ namespace ReinventTheWheelProblem2 {
             }
         }
 
-        public double Cost => Tires == 0 ? 0 : BaseGhg + TireGhg * Tires;
+        public double Cost => PredictCost(Tires);
 
         public Path() {
             Tires = 0;
@@ -36,5 +36,9 @@ namespace ReinventTheWheelProblem2 {
             Tires = 0;
         }
         */
+
+        public double PredictCost(int tires) {
+            return tires == 0 ? 0 : BaseGhg + TireGhg * tires;
+        }
     }
 }

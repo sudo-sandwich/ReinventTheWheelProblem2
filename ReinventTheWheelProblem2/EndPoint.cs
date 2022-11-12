@@ -22,5 +22,9 @@ namespace ReinventTheWheelProblem2 {
         public double CalculateCost() {
             return Path.Cost;
         }
+
+        public double PredictCost(int tires) {
+            return Path.PredictCost(tires);
+        }
     }
 }

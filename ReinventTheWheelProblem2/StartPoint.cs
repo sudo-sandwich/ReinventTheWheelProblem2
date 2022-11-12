@@ -6,15 +6,15 @@ namespace ReinventTheWheelProblem2 {
     class StartPoint {
         public string Name { get; set; }
 
-        public int Tires { get; set; }
+        public int InitialTires { get; set; }
 
         public Path DefaultPath { get; set; }
 
         public HashSet<string> EvNames { get; set; }
         public HashSet<string> DvNames { get; set; }
 
-        public Dictionary<EndPoint, Path> ElectricVehicle { get; set; }
-        public Dictionary<EndPoint, Path> DieselVehicle { get; set; }
+        public Dictionary<EndPoint, Path> EvPaths { get; set; }
+        public Dictionary<EndPoint, Path> DvPaths { get; set; }
 
         public int CurrentTires { get; set; }
         public int EvInUse { get; set; }
@@ -24,8 +24,8 @@ namespace ReinventTheWheelProblem2 {
             EvNames = new();
             DvNames = new();
 
-            ElectricVehicle = new();
-            DieselVehicle = new();
+            EvPaths = new();
+            DvPaths = new();
 
             EvInUse = 0;
             DvInUse = 0;
@@ -46,21 +46,22 @@ namespace ReinventTheWheelProblem2 {
         */
 
         public void Reset() {
-            foreach (Path path in ElectricVehicle.Values) {
+            foreach (Path path in EvPaths.Values) {
                 path.Tires = 0;
             }
 
-            foreach (Path path in DieselVehicle.Values) {
+            foreach (Path path in DvPaths.Values) {
                 path.Tires = 0;
             }
 
-            CurrentTires = Tires;
+            CurrentTires = InitialTires;
             EvInUse = 0;
             DvInUse = 0;
         }
 
         public void UseEv(EndPoint ep, int tires) {
-            if (ElectricVehicle[ep].Tires != 0) {
+            //Console.WriteLine($"UseEv: {ep.Name}, {tires}");
+            if (EvPaths[ep].Tires != 0) {
                 throw new Exception("Path already in use.");
             }
             /*
@@ -75,14 +76,14 @@ namespace ReinventTheWheelProblem2 {
                 throw new Exception("Not enough tires.");
             }
 
-            ElectricVehicle[ep].Tires = tires;
+            EvPaths[ep].Tires = tires;
             ep.Path.Tires += tires;
             CurrentTires -= tires;
             EvInUse++;
         }
 
         public void UseDv(EndPoint ep, int tires) {
-            if (DieselVehicle[ep].Tires != 0) {
+            if (DvPaths[ep].Tires != 0) {
                 throw new Exception("Path already in use.");
             }
             /*
@@ -97,7 +98,7 @@ namespace ReinventTheWheelProblem2 {
                 throw new Exception("Not enough tires.");
             }
 
-            DieselVehicle[ep].Tires = tires;
+            DvPaths[ep].Tires = tires;
             ep.Path.Tires += tires;
             CurrentTires -= tires;
             DvInUse++;
@@ -106,11 +107,11 @@ namespace ReinventTheWheelProblem2 {
         public double CalculateCost() {
             double cost = 0;
 
-            foreach (Path path in ElectricVehicle.Values) {
+            foreach (Path path in EvPaths.Values) {
                 cost += path.Cost;
             }
 
-            foreach (Path path in DieselVehicle.Values) {
+            foreach (Path path in DvPaths.Values) {
                 cost += path.Cost;
             }
 
@@ -118,6 +119,10 @@ namespace ReinventTheWheelProblem2 {
             cost += DefaultPath.Cost;
 
             return cost;
+        }
+
+        public double PredictCost(int tires) {
+            return DefaultPath.PredictCost(tires);
         }
     }
 }

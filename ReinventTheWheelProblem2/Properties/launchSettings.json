@@ -2,7 +2,7 @@
   "profiles": {
     "ReinventTheWheelProblem2": {
       "commandName": "Project",
-      "commandLineArgs": "\"$(ProjectDir)Challenge2_capacity_public.csv\" \"$(ProjectDir)Challenge2_distances_public.csv\" \"$(ProjectDir)Challenge2_second_leg_GHG_public.csv\" \"$(ProjectDir)Challenge2_total_tires_public.csv\" \"$(ProjectDir)Challenge2_vehicles_public.csv\""
+      "commandLineArgs": "\"$(ProjectDir)Challenge2_capacity_public.csv\" \"$(ProjectDir)Challenge2_distances_public.csv\" \"$(ProjectDir)Challenge2_second_leg_GHG_public.csv\" \"$(ProjectDir)Challenge2_total_tires_public.csv\" \"$(ProjectDir)Challenge2_vehicles_public.csv\" \"$(ProjectDir)"
     }
   }
 }
