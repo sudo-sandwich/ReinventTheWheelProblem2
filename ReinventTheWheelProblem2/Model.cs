@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace ReinventTheWheelProblem2 {
     class Model {
-        public ICollection<StartPoint> StartPoints { get; private set; }
-        public ICollection<EndPoint> EndPoints { get; private set; }
+        public ICollection<StartPoint> StartPoints { get; set; }
+        public ICollection<EndPoint> EndPoints { get; set; }
 
         public void Reset() {
             foreach (StartPoint sp in StartPoints) {

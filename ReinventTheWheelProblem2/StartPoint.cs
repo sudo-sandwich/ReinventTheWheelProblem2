@@ -10,8 +10,8 @@ namespace ReinventTheWheelProblem2 {
 
         public Path DefaultPath { get; set; }
 
-        public string[] EvNames { get; set; }
-        public string[] DvNames { get; set; }
+        public HashSet<string> EvNames { get; set; }
+        public HashSet<string> DvNames { get; set; }
 
         public Dictionary<EndPoint, Path> ElectricVehicle { get; set; }
         public Dictionary<EndPoint, Path> DieselVehicle { get; set; }
@@ -21,6 +21,12 @@ namespace ReinventTheWheelProblem2 {
         public int DvInUse { get; set; }
 
         public StartPoint() {
+            EvNames = new();
+            DvNames = new();
+
+            ElectricVehicle = new();
+            DieselVehicle = new();
+
             EvInUse = 0;
             DvInUse = 0;
         }
@@ -62,7 +68,7 @@ namespace ReinventTheWheelProblem2 {
                 throw new Exception($"End point does not enough room for {tires} tires. Current: {ep.Path.Tires}, Max: {ep.MaxTires}");
             }
             */
-            if (EvInUse >= EvNames.Length) {
+            if (EvInUse >= EvNames.Count) {
                 throw new Exception("No more electric vehicles.");
             }
             if (tires > CurrentTires) {
@@ -84,7 +90,7 @@ namespace ReinventTheWheelProblem2 {
                 throw new Exception($"End point does not enough room for {tires} tires. Current: {ep.Path.Tires}, Max: {ep.MaxTires}");
             }
             */
-            if (DvInUse >= DvNames.Length) {
+            if (DvInUse >= DvNames.Count) {
                 throw new Exception("No more diesel vehicles.");
             }
             if (tires > CurrentTires) {
@@ -98,10 +104,6 @@ namespace ReinventTheWheelProblem2 {
         }
 
         public double CalculateCost() {
-            if (CurrentTires != 0) {
-                throw new Exception("Not all tires have been shipped.");
-            }
-
             double cost = 0;
 
             foreach (Path path in ElectricVehicle.Values) {
@@ -112,6 +114,7 @@ namespace ReinventTheWheelProblem2 {
                 cost += path.Cost;
             }
 
+            DefaultPath.Tires = CurrentTires;
             cost += DefaultPath.Cost;
 
             return cost;
