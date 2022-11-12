@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ReinventTheWheelProblem2 {
@@ -8,6 +9,10 @@ namespace ReinventTheWheelProblem2 {
         public double TireGhg { get; set; }
         public int MaxTires { get; set; }
 
+        public List<int> Tires { get; set; }
+        public int TotalTires => Tires.Sum();
+
+        /*
         private int _tires;
         public int Tires { 
             get {
@@ -20,11 +25,12 @@ namespace ReinventTheWheelProblem2 {
                 _tires = value;
             }
         }
+        */
 
-        public double Cost => PredictCost(Tires);
+        public double Cost => PredictCost(TotalTires);
 
         public Path() {
-            Tires = 0;
+            Tires = new();
         }
 
         /*

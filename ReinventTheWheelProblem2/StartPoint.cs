@@ -47,23 +47,26 @@ namespace ReinventTheWheelProblem2 {
 
         public void Reset() {
             foreach (Path path in EvPaths.Values) {
-                path.Tires = 0;
+                path.Tires.Clear();
             }
 
             foreach (Path path in DvPaths.Values) {
-                path.Tires = 0;
+                path.Tires.Clear();
             }
 
             CurrentTires = InitialTires;
+            DefaultPath.Tires.Clear();
             EvInUse = 0;
             DvInUse = 0;
         }
 
         public void UseEv(EndPoint ep, int tires) {
             //Console.WriteLine($"UseEv: {ep.Name}, {tires}");
+            /*
             if (EvPaths[ep].Tires != 0) {
                 throw new Exception("Path already in use.");
             }
+            */
             /*
             if (ep.Path.Tires + tires > ep.MaxTires) {
                 throw new Exception($"End point does not enough room for {tires} tires. Current: {ep.Path.Tires}, Max: {ep.MaxTires}");
@@ -76,16 +79,18 @@ namespace ReinventTheWheelProblem2 {
                 throw new Exception("Not enough tires.");
             }
 
-            EvPaths[ep].Tires = tires;
-            ep.Path.Tires += tires;
+            EvPaths[ep].Tires.Add(tires);
+            ep.Path.Tires.Add(tires);
             CurrentTires -= tires;
             EvInUse++;
         }
 
         public void UseDv(EndPoint ep, int tires) {
+            /*
             if (DvPaths[ep].Tires != 0) {
                 throw new Exception("Path already in use.");
             }
+            */
             /*
             if (ep.Path.Tires + tires > ep.MaxTires) {
                 throw new Exception($"End point does not enough room for {tires} tires. Current: {ep.Path.Tires}, Max: {ep.MaxTires}");
@@ -98,8 +103,8 @@ namespace ReinventTheWheelProblem2 {
                 throw new Exception("Not enough tires.");
             }
 
-            DvPaths[ep].Tires = tires;
-            ep.Path.Tires += tires;
+            DvPaths[ep].Tires.Add(tires);
+            ep.Path.Tires.Add(tires);
             CurrentTires -= tires;
             DvInUse++;
         }
@@ -115,7 +120,7 @@ namespace ReinventTheWheelProblem2 {
                 cost += path.Cost;
             }
 
-            DefaultPath.Tires = CurrentTires;
+            DefaultPath.Tires.Add(CurrentTires);
             cost += DefaultPath.Cost;
 
             return cost;

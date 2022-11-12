@@ -125,15 +125,15 @@ namespace ReinventTheWheelProblem2 {
                 dvNames.MoveNext();
 
                 foreach (EndPoint ep in sp.EvPaths.Keys) {
-                    if (sp.EvPaths[ep].Tires > 0) {
-                        output.Add(new(sp.Name, evNames.Current, ep.Name, sp.EvPaths[ep].Tires));
+                    foreach (int tires in sp.EvPaths[ep].Tires) {
+                        output.Add(new(sp.Name, evNames.Current, ep.Name, tires));
                         evNames.MoveNext();
                     }
                 }
 
                 foreach (EndPoint ep in sp.DvPaths.Keys) {
-                    if (sp.DvPaths[ep].Tires > 0) {
-                        output.Add(new(sp.Name, dvNames.Current, ep.Name, sp.DvPaths[ep].Tires));
+                    foreach (int tires in sp.DvPaths[ep].Tires) {
+                        output.Add(new(sp.Name, dvNames.Current, ep.Name, tires));
                         dvNames.MoveNext();
                     }
                 }

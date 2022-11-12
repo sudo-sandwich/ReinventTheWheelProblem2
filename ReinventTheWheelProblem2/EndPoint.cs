@@ -16,7 +16,7 @@ namespace ReinventTheWheelProblem2 {
         */
 
         public void Reset() {
-            Path.Tires = 0;
+            Path.Tires.Clear();
         }
 
         public double CalculateCost() {

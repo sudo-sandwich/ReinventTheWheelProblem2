@@ -20,7 +20,7 @@ namespace ReinventTheWheelProblem2 {
 
                     // cost of shipping everything out of the start point
                     double shipCost = 0;
-
+                     
                     // loop while we still have tires in the location and vehicles available
                     while (sp.CurrentTires > 0 && (sp.EvInUse < sp.EvNames.Count || sp.DvInUse < sp.DvNames.Count)) {
                         //Console.WriteLine($"Current sp: {sp.Name}, current tires: {sp.CurrentTires}, EvInUse: {sp.EvInUse}/{sp.EvNames.Count}, DvInUse: {sp.DvInUse}/{sp.DvNames.Count}");
@@ -74,15 +74,15 @@ namespace ReinventTheWheelProblem2 {
 
             foreach (EndPoint currentEp in paths.Keys) {
                 // skip if we've already used this path or if the end point is already full
-                if (paths[currentEp].Tires != 0 || currentEp.Path.Tires == currentEp.Path.MaxTires) {
+                if (currentEp.Path.TotalTires == currentEp.Path.MaxTires) {
                     continue;
                 }
 
                 // smallest value of max vehicle load, tires at the start location, and room left at the end point
-                int numTires = Math.Min(paths[currentEp].MaxTires, Math.Min(maxTires, currentEp.Path.MaxTires - currentEp.Path.Tires));
-                double epCostDifference = currentEp.PredictCost(currentEp.Path.Tires + numTires) - currentEp.CalculateCost();
-                double vehicleCost = paths[currentEp].PredictCost(numTires);
-                double totalCost = epCostDifference + vehicleCost;
+                int numTires = Math.Min(paths[currentEp].MaxTires, Math.Min(maxTires, currentEp.Path.MaxTires - currentEp.Path.TotalTires));
+                double epCostDifference = currentEp.PredictCost(currentEp.Path.TotalTires + numTires) - currentEp.CalculateCost();
+                double vehicleCostDifference = paths[currentEp].PredictCost(numTires) - paths[currentEp].Cost;
+                double totalCost = epCostDifference + vehicleCostDifference;
                 double avgCost = totalCost / numTires;
 
                 if (avgCost < minShip.AvgTireCost) {
@@ -95,7 +95,7 @@ namespace ReinventTheWheelProblem2 {
 
         // yoink
         // https://stackoverflow.com/a/10630026
-        private static IEnumerable<IEnumerable<T>> GetPermutations<T>(IEnumerable<T> list, int length) {
+        public static IEnumerable<IEnumerable<T>> GetPermutations<T>(IEnumerable<T> list, int length) {
             if (length == 1) return list.Select(t => new T[] { t });
 
             return GetPermutations(list, length - 1).SelectMany(t => list.Where(e => !t.Contains(e)), (t1, t2) => t1.Concat(new T[] { t2 }));
