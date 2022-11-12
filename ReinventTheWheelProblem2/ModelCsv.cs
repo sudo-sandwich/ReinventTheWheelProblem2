@@ -139,10 +139,10 @@ namespace ReinventTheWheelProblem2 {
                 }
             }
 
-            Console.WriteLine("---------");
             foreach (Output o in output) {
                 Console.WriteLine(o.ToString());
             }
+            Console.WriteLine("---------");
 
             return output;
         }
